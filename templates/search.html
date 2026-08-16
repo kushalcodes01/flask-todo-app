@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Task</title>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <h1>Search Task</h1>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="task_id"
+            placeholder="Enter Task ID"
+            required>
+
+        <br><br>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+</body>
+</html>
