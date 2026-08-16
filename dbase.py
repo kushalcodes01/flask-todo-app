@@ -16,6 +16,55 @@ def create_table():
     conn.commit()
     conn.close()
 
+def create_users_table():
+
+    conn = sqlite3.connect("list.db")
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS users(
+        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        email TEXT UNIQUE,
+        password TEXT)
+        """)
+
+    conn.commit()
+    conn.close()
+
+def add_user(username, email, password):
+
+    conn = sqlite3.connect("list.db")
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """INSERT INTO users
+        (username, email, password)
+        VALUES(?, ?, ?)""",
+        (username, email, password)
+    )
+
+    conn.commit()
+    conn.close()
+
+def get_all_users():
+
+    conn = sqlite3.connect("list.db")
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM users"
+    )
+
+    users = cursor.fetchall()
+
+    conn.close()
+
+    return users
+
 def add_task(task_id, task_name, status):
 
     conn = sqlite3.connect("list.db")
@@ -88,3 +137,19 @@ def search_task(task_id):
     task = cursor.fetchone()
     conn.close()
     return task
+
+def search_user(username):
+
+    conn = sqlite3.connect("list.db")
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """SELECT * FROM users
+        WHERE username =?""",
+        (username,)
+    )
+
+    user = cursor.fetchone()
+    conn.close()
+    return user
