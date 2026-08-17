@@ -7,11 +7,15 @@ def create_table():
     cursor = conn.cursor()
 
     cursor.execute(
-        """CREATE TABLE IF NOT EXISTS tasks(
-        task_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        task_name TEXT,
-        status TEXT)
-        """)
+        """
+        CREATE TABLE IF NOT EXISTS tasks(
+            task_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            task_name TEXT,
+            status TEXT
+        )
+        """
+    )
 
     conn.commit()
     conn.close()
@@ -64,35 +68,42 @@ def get_all_users():
     conn.close()
 
     return users
-
-def add_task(task_id, task_name, status):
+def add_task(user_id, task_name, status):
 
     conn = sqlite3.connect("list.db")
 
     cursor = conn.cursor()
 
     cursor.execute(
-        """INSERT INTO tasks
-        VALUES (?, ?, ?)""",
-        (task_id, task_name, status)
+        """
+        INSERT INTO tasks
+        (user_id, task_name, status)
+        VALUES (?, ?, ?)
+        """,
+        (user_id, task_name, status)
     )
 
     conn.commit()
     conn.close()
-
-def get_all_tasks():
+    
+def get_all_tasks(user_id):
 
     conn = sqlite3.connect("list.db")
 
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT * FROM tasks"
+        """
+        SELECT * FROM tasks
+        WHERE user_id = ?
+        """,
+        (user_id,)
     )
 
     tasks = cursor.fetchall()
 
     conn.close()
+
     return tasks
 
 def delete_task(task_id):

@@ -18,11 +18,12 @@ create_table() #task table
 create_users_table() #users table
 
 @app.route("/")
-def Home():
-    if "username" not in session:
-        return redirect(url_for("login"))
+def home():
 
-    return render_template("home.html")
+    if "username" in session:
+        return redirect(url_for("view_tasks"))
+
+    return render_template("landing.html")
 
 @app.route("/show")
 def view_tasks():
@@ -30,13 +31,14 @@ def view_tasks():
     if "username" not in session:
         return redirect(url_for("login"))
 
-    tasks = get_all_tasks()
+    user_id = session["user_id"]
+
+    tasks = get_all_tasks(user_id)
 
     return render_template(
         "show.html",
         tasks=tasks
     )
-
 @app.route("/form", methods=["GET", "POST"])
 def form():
     if "username" not in session:
@@ -44,12 +46,12 @@ def form():
 
     if request.method == "POST":
 
-        task_id = request.form["task_id"]
+        user_id = session["user_id"]
         task_name = request.form["name"]
         status = request.form["status"]
 
         add_task(
-            task_id,
+            user_id,
             task_name,
             status
         )
@@ -112,7 +114,7 @@ def register():
             email,
             password
         )
-        return "Registration Successfully"
+        return redirect(url_for("login"))
     return render_template("register.html")
 
 @app.route("/users")
@@ -139,8 +141,11 @@ def login():
             return "User Not Found"
 
         if password == user[3]:
-            session["username"] = username
-            return "Login Successful"
+
+            session["user_id"] = user[0]
+            session["username"] = user[1]
+
+            return redirect(url_for("view_tasks"))
 
         return "Wrong Password"
 
@@ -149,7 +154,7 @@ def login():
 @app.route("/profile")
 def profile():
 
-    return f"Session Data: {dict(session)}"
+    return str(dict(session))
 
 @app.route("/logout")
 def logout():
