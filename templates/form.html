@@ -2,6 +2,9 @@
 <html>
 <head>
     <title>Add Task</title>
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" 
+        rel="stylesheet">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -24,6 +27,8 @@
             required>
 
         <br><br>
+        <label>Due Date:</label>
+        <input type="date" name="due_date" required>
 
         <button type="submit">
             Add Task

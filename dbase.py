@@ -68,7 +68,7 @@ def get_all_users():
     conn.close()
 
     return users
-def add_task(user_id, task_name, status):
+def add_task(user_id, task_name, status, due_date):
 
     conn = sqlite3.connect("list.db")
 
@@ -77,10 +77,10 @@ def add_task(user_id, task_name, status):
     cursor.execute(
         """
         INSERT INTO tasks
-        (user_id, task_name, status)
-        VALUES (?, ?, ?)
+        (user_id, task_name, status, due_date)
+        VALUES (?, ?, ?, ?)
         """,
-        (user_id, task_name, status)
+        (user_id, task_name, status, due_date)
     )
 
     conn.commit()
@@ -119,7 +119,7 @@ def delete_task(task_id):
     conn.commit()
     conn.close()
 
-def update_task(task_id, task_name, status):
+def update_task(task_id, task_name, status, due_date):
 
     conn = sqlite3.connect("list.db")
 
@@ -127,9 +127,9 @@ def update_task(task_id, task_name, status):
 
     cursor.execute(
         """UPDATE tasks
-        SET task_name = ?, status = ?
+        SET task_name = ?, status = ?, due_date =?
         WHERE task_id= ?""",
-        (task_name, status, task_id)
+        (task_name, status, due_date, task_id)
     )
     conn.commit()
     conn.close()
@@ -164,3 +164,36 @@ def search_user(username):
     user = cursor.fetchone()
     conn.close()
     return user
+
+def get_task(task_id):
+
+    conn = sqlite3.connect("list.db")
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT * FROM tasks
+        WHERE task_id = ?
+        """,
+        (task_id,)
+    )
+
+    task = cursor.fetchone()
+
+    conn.close()
+
+    return task
+
+def add_due_date_column():
+
+    conn = sqlite3.connect("list.db")
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """ALTER TABLE tasks
+        ADD COLUMN due_date TEXT"""
+    )
+    conn.commit()
+    conn.close()

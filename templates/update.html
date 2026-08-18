@@ -2,6 +2,9 @@
 <html>
 <head>
     <title>Update Task</title>
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" 
+        rel="stylesheet">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -23,6 +26,8 @@
             value="{{ task[2] }}"
             required>
 
+        <br><br>
+        <input type="date" name="due_date" value="{{ task[4] }}">
         <br><br>
 
         <button type="submit">
