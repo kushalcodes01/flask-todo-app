@@ -1,40 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Add Task</title>
-    <link 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" 
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
         rel="stylesheet">
+
 </head>
-<body>
+
+<body class="bg-light">
+
     {% include 'navbar.html' %}
-    <h1>Add Task</h1>
 
-    <form method="POST">
+    <div class="container mt-5">
 
-        <input
-            type="text"
-            name="name"
-            placeholder="Task Name"
-            required>
+        <div class="row justify-content-center">
 
-        <br><br>
+            <div class="col-md-6 col-lg-5">
 
-        <input
-            type="text"
-            name="status"
-            placeholder="Pending / Done"
-            required>
+                <div class="card shadow-sm">
 
-        <br><br>
-        <label>Due Date:</label>
-        <input type="date" name="due_date" required>
+                    <div class="card-body p-4">
 
-        <button type="submit">
-            Add Task
-        </button>
+                        <h2 class="text-center mb-2">
+                            Add New Task
+                        </h2>
 
-    </form>
+                        <p class="text-center text-muted mb-4">
+                            Create a new task and keep track of it.
+                        </p>
+
+
+                        <form method="POST">
+
+                            <!-- Task Name -->
+                            <div class="mb-3">
+
+                                <label
+                                    for="name"
+                                    class="form-label">
+                                    Task Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    class="form-control"
+                                    placeholder="Enter Task Name"
+                                    required>
+
+                            </div>
+
+
+                            <!-- Status -->
+                            <div class="mb-3">
+
+                                <label
+                                    for="status"
+                                    class="form-label">
+                                    Status
+                                </label>
+
+                                <select
+                                    id="status"
+                                    name="status"
+                                    class="form-select">
+
+                                    <option value="pending">
+                                        Pending
+                                    </option>
+
+                                    <option value="done">
+                                        Done
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Priority -->
+                            <div class="mb-3">
+
+                                <label
+                                    for="priority"
+                                    class="form-label">
+                                    Priority
+                                </label>
+
+                                <select
+                                    id="priority"
+                                    name="priority"
+                                    class="form-select">
+
+                                    <option value="high">
+                                        🔥 High
+                                    </option>
+
+                                    <option value="medium" selected>
+                                        🟡 Medium
+                                    </option>
+
+                                    <option value="low">
+                                        🟢 Low
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Due Date -->
+                            <div class="mb-4">
+
+                                <label
+                                    for="due_date"
+                                    class="form-label">
+                                    Due Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="due_date"
+                                    name="due_date"
+                                    class="form-control"
+                                    required>
+
+                            </div>
+
+
+                            <!-- Submit -->
+                            <button
+                                type="submit"
+                                class="btn btn-primary w-100">
+
+                                Add Task
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
 </html>

@@ -1,59 +1,212 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>All Tasks</title>
-    <link h
-        ref="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" 
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
         rel="stylesheet">
+
 </head>
-<body>
+
+<body class="bg-light">
 
     {% include 'navbar.html' %}
 
-    <h1>All Tasks</h1>
+    <div class="container mt-4">
 
-    {% if tasks %}
+        <h1 class="mb-4">
+            All Tasks
+        </h1>
 
-    <table class="table table-striped table-hover">
-    <tr>
-    <th>Task ID</th>
-        <th>Task Name</th>
-        <th>Status</th>
-        <th>Due Date</th>
-        <th>Update</th>
-        <th>Delete</th>
-    </tr>
+        {% if tasks %}
 
-        {% for task in tasks %}
+        <div class="card shadow-sm">
 
-        <tr>
-            <td>{{ task[0] }}</td>
-            <td>{{ task[2] }}</td>
-            <td>{{ task[3] }}</td>
-            <td>{{ task[4] }}</td>
+            <div class="card-body">
 
-            <td>
-                <a href="/update/{{ task[0] }}">
-                    Update
-                </a>
-            </td>
+                <div class="table-responsive">
 
-            <td>
-                <a href="/delete/{{ task[0] }}">
-                    Delete
-                </a>
-            </td>
-        </tr>
+                    <table class="table table-striped table-hover align-middle mb-0">
 
-        {% endfor %}
+                        <thead>
 
-    </table>
+                            <tr>
 
-    {% else %}
+                                <th>Task ID</th>
+                                <th>Task Name</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Due Date</th>
+                                <th>Actions</th>
 
-    <h3>No Tasks Found</h3>
+                            </tr>
 
-    {% endif %}
+                        </thead>
+
+                        <tbody>
+
+                            {% for item in tasks %}
+
+                            {% set task = item.task %}
+
+                            <tr>
+
+                                <!-- Task ID -->
+
+                                <td>
+                                    {{ task[0] }}
+                                </td>
+
+
+                                <!-- Task Name -->
+
+                                <td>
+                                    {{ task[2] }}
+                                </td>
+
+
+                                <!-- Status -->
+
+                                <td>
+
+                                    {% if item.overdue %}
+
+                                        <span class="badge bg-danger">
+                                            🔴 Overdue
+                                        </span>
+
+                                    {% elif task[3] == "done" %}
+
+                                        <span class="badge bg-success">
+                                            ✅ Done
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            🟡 Pending
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Priority -->
+
+                                <td>
+
+                                    {% if task[5] == "high" %}
+
+                                        <span class="badge bg-danger">
+                                            🔥 High
+                                        </span>
+
+                                    {% elif task[5] == "medium" %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            🟡 Medium
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-success">
+                                            🟢 Low
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Due Date -->
+
+                                <td>
+
+                                    <span class="badge bg-info text-dark">
+                                        {{ task[4] }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Actions -->
+
+                                <td>
+
+                                    <div class="d-flex gap-1 flex-wrap">
+
+                                        {% if task[3] != "done" %}
+
+                                            <a
+                                                href="/complete/{{ task[0] }}"
+                                                class="btn btn-success btn-sm">
+
+                                                ✓ Complete
+
+                                            </a>
+
+                                        {% endif %}
+
+
+                                        <a
+                                            href="/update/{{ task[0] }}"
+                                            class="btn btn-warning btn-sm">
+
+                                            Update
+
+                                        </a>
+
+
+                                        <a
+                                            href="/delete/{{ task[0] }}"
+                                            class="btn btn-danger btn-sm">
+
+                                            Delete
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="card shadow-sm">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-2">
+                    No Tasks Found
+                </h3>
+
+                <p class="text-muted mb-0">
+                    You don't have any tasks yet.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
 
 </body>
 </html>

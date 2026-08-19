@@ -1,48 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Register</title>
-    <link h
-        ref="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" 
+    <title>Register - To-Do App</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
         rel="stylesheet">
 </head>
-<body>
+
+<body class="bg-light">
 
     {% include 'navbar.html' %}
 
-    <h1>Create Account</h1>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6 col-lg-5">
 
-    <form method="POST">
+                <div class="card shadow">
+                    <div class="card-body p-4">
 
-        <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            required>
+                        <h1 class="text-center mb-2">
+                            Create Account
+                        </h1>
 
-        <br><br>
+                        <p class="text-center text-muted mb-4">
+                            Join the To-Do App and start organizing your tasks.
+                        </p>
 
-        <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            required>
+                        <form method="POST">
 
-        <br><br>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    Username
+                                </label>
 
-        <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required>
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    placeholder="Enter your username"
+                                    class="form-control"
+                                    required>
+                            </div>
 
-        <br><br>
 
-        <button type="submit">
-            Register
-        </button>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    Email
+                                </label>
 
-    </form>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Enter your email"
+                                    class="form-control"
+                                    required>
+                            </div>
+
+
+                            <div class="mb-4">
+                                <label for="password" class="form-label">
+                                    Password
+                                </label>
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Create a password"
+                                    class="form-control"
+                                    required>
+                            </div>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary w-100">
+                                Create Account
+                            </button>
+
+                        </form>
+
+
+                        <p class="text-center mt-3 mb-0">
+                            Already have an account?
+                            <a href="/login">
+                                Login
+                            </a>
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

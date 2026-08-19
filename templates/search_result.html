@@ -1,28 +1,176 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Task Details</title>
-    <link h
-        ref="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" 
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
         rel="stylesheet">
+
 </head>
-<body>
+
+<body class="bg-light">
+
     {% include 'navbar.html' %}
-    <h1>Task Details</h1>
 
-    {% if task %}
+    <div class="container mt-5">
 
-        <p><strong>ID:</strong> {{ task[0] }}</p>
+        <div class="row justify-content-center">
 
-        <p><strong>Name:</strong> {{ task[1] }}</p>
+            <div class="col-md-7">
 
-        <p><strong>Status:</strong> {{ task[2] }}</p>
+                {% if task %}
 
-    {% else %}
+                <div class="card shadow-sm">
 
-        <h3>Task Not Found</h3>
+                    <div class="card-body p-4">
 
-    {% endif %}
+                        <h2 class="mb-4">
+                            Task Details
+                        </h2>
+
+
+                        <!-- Task ID -->
+
+                        <div class="mb-3">
+
+                            <strong>Task ID:</strong>
+
+                            {{ task[0] }}
+
+                        </div>
+
+
+                        <!-- Task Name -->
+
+                        <div class="mb-3">
+
+                            <strong>Task Name:</strong>
+
+                            {{ task[2] }}
+
+                        </div>
+
+
+                        <!-- Status -->
+
+                        <div class="mb-3">
+
+                            <strong>Status:</strong>
+
+                            {% if is_overdue %}
+
+                                <span class="badge bg-danger">
+                                    🔴 Overdue
+                                </span>
+
+                            {% elif task[3] == "done" %}
+
+                                <span class="badge bg-success">
+                                    ✅ Done
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+                                    🟡 Pending
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Priority -->
+
+                        <div class="mb-3">
+
+                            <strong>Priority:</strong>
+
+                            {% if task[5] == "high" %}
+
+                                <span class="badge bg-danger">
+                                    🔥 High
+                                </span>
+
+                            {% elif task[5] == "medium" %}
+
+                                <span class="badge bg-warning text-dark">
+                                    🟡 Medium
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-success">
+                                    🟢 Low
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Due Date -->
+
+                        <div class="mb-4">
+
+                            <strong>Due Date:</strong>
+
+                            <span class="badge bg-info text-dark">
+                                {{ task[4] }}
+                            </span>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+
+                        <div class="d-flex gap-2">
+
+                            <a
+                                href="/update/{{ task[0] }}"
+                                class="btn btn-warning">
+
+                                Update
+
+                            </a>
+
+                            <a
+                                href="/show"
+                                class="btn btn-secondary">
+
+                                Back to Tasks
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body text-center">
+
+                        <h3>
+                            Task Not Found
+                        </h3>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
 </html>
