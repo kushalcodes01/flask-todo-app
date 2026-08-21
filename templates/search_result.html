@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
     <title>Task Details</title>
@@ -30,30 +31,15 @@
                             Task Details
                         </h2>
 
-
-                        <!-- Task ID -->
-
                         <div class="mb-3">
-
                             <strong>Task ID:</strong>
-
-                            {{ task[0] }}
-
+                            {{ task["task_id"] }}
                         </div>
-
-
-                        <!-- Task Name -->
 
                         <div class="mb-3">
-
                             <strong>Task Name:</strong>
-
-                            {{ task[2] }}
-
+                            {{ task["task_name"] }}
                         </div>
-
-
-                        <!-- Status -->
 
                         <div class="mb-3">
 
@@ -65,7 +51,7 @@
                                     🔴 Overdue
                                 </span>
 
-                            {% elif task[3] == "done" %}
+                            {% elif task["status"] == "done" %}
 
                                 <span class="badge bg-success">
                                     ✅ Done
@@ -81,20 +67,17 @@
 
                         </div>
 
-
-                        <!-- Priority -->
-
                         <div class="mb-3">
 
                             <strong>Priority:</strong>
 
-                            {% if task[5] == "high" %}
+                            {% if task["priority"] == "high" %}
 
                                 <span class="badge bg-danger">
                                     🔥 High
                                 </span>
 
-                            {% elif task[5] == "medium" %}
+                            {% elif task["priority"] == "medium" %}
 
                                 <span class="badge bg-warning text-dark">
                                     🟡 Medium
@@ -110,38 +93,28 @@
 
                         </div>
 
-
-                        <!-- Due Date -->
-
                         <div class="mb-4">
 
                             <strong>Due Date:</strong>
 
                             <span class="badge bg-info text-dark">
-                                {{ task[4] }}
+                                {{ task["due_date"] }}
                             </span>
 
                         </div>
 
-
-                        <!-- Buttons -->
-
                         <div class="d-flex gap-2">
 
                             <a
-                                href="/update/{{ task[0] }}"
+                                href="/update/{{ task['task_id'] }}"
                                 class="btn btn-warning">
-
                                 Update
-
                             </a>
 
                             <a
                                 href="/show"
                                 class="btn btn-secondary">
-
                                 Back to Tasks
-
                             </a>
 
                         </div>
@@ -173,4 +146,5 @@
     </div>
 
 </body>
+
 </html>

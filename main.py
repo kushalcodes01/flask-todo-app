@@ -2,6 +2,9 @@ import os
 from datetime import date
 
 from dotenv import load_dotenv
+
+load_dotenv()
+
 from flask import (
     Flask,
     render_template,
@@ -10,6 +13,7 @@ from flask import (
     url_for,
     session
 )
+
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash
@@ -26,30 +30,36 @@ from dbase import (
     add_user,
     search_user,
     get_task,
-    complete_task
+    complete_task,
+    migrate_sqlite_data
 )
 
 
-# Load environment variables
-load_dotenv()
+# --------------------------------------------------
+# FLASK APP
+# --------------------------------------------------
 
-
-# Create Flask application
 app = Flask(__name__)
 
-
-# Secret key
 app.secret_key = os.getenv("SECRET_KEY")
 
 if not app.secret_key:
+
     raise RuntimeError(
         "SECRET_KEY is not configured."
     )
 
 
-# Initialize database tables
+# --------------------------------------------------
+# DATABASE INITIALIZATION
+# --------------------------------------------------
+
 create_table()
 create_users_table()
+
+# Import old SQLite data if list.db exists.
+# Safe to run repeatedly because conflicts are handled.
+migrate_sqlite_data()
 
 
 # --------------------------------------------------
@@ -60,9 +70,14 @@ create_users_table()
 def home():
 
     if "username" in session:
-        return redirect(url_for("dashboard"))
 
-    return render_template("landing.html")
+        return redirect(
+            url_for("dashboard")
+        )
+
+    return render_template(
+        "landing.html"
+    )
 
 
 # --------------------------------------------------
@@ -73,7 +88,10 @@ def home():
 def dashboard():
 
     if "username" not in session:
-        return redirect(url_for("login"))
+
+        return redirect(
+            url_for("login")
+        )
 
     username = session["username"]
     user_id = session["user_id"]
@@ -99,6 +117,7 @@ def dashboard():
             pending_tasks += 1
 
             if task["due_date"] < today:
+
                 overdue_tasks += 1
 
     if total_tasks == 0:
@@ -131,7 +150,9 @@ def dashboard():
 def view_tasks():
 
     if "username" not in session:
-        return redirect(url_for("login"))
+        return redirect(
+            url_for("login")
+        )
 
     user_id = session["user_id"]
 
@@ -160,16 +181,21 @@ def view_tasks():
         tasks=task_data
     )
 
-
 # --------------------------------------------------
 # ADD TASK
 # --------------------------------------------------
 
-@app.route("/form", methods=["GET", "POST"])
+@app.route(
+    "/form",
+    methods=["GET", "POST"]
+)
 def form():
 
     if "username" not in session:
-        return redirect(url_for("login"))
+
+        return redirect(
+            url_for("login")
+        )
 
     if request.method == "POST":
 
@@ -192,7 +218,9 @@ def form():
             url_for("view_tasks")
         )
 
-    return render_template("form.html")
+    return render_template(
+        "form.html"
+    )
 
 
 # --------------------------------------------------
@@ -206,7 +234,10 @@ def form():
 def edit_task(task_id):
 
     if "username" not in session:
-        return redirect(url_for("login"))
+
+        return redirect(
+            url_for("login")
+        )
 
     user_id = session["user_id"]
 
@@ -216,6 +247,7 @@ def edit_task(task_id):
     )
 
     if task is None:
+
         return "Task Not Found", 404
 
     if request.method == "POST":
@@ -255,23 +287,31 @@ def edit_task(task_id):
 def search():
 
     if "username" not in session:
-        return redirect(url_for("login"))
+
+        return redirect(
+            url_for("login")
+        )
 
     if request.method == "POST":
 
         task_id = request.form["task_id"]
 
         try:
+
             task_id = int(task_id)
+
         except ValueError:
+
             return "Invalid Task ID", 400
 
         task = search_task(task_id)
 
         if task is None:
+
             return "Task Not Found", 404
 
         if task["user_id"] != session["user_id"]:
+
             return "Task Not Found", 404
 
         today = date.today().isoformat()
@@ -287,18 +327,25 @@ def search():
             is_overdue=is_overdue
         )
 
-    return render_template("search.html")
+    return render_template(
+        "search.html"
+    )
 
 
 # --------------------------------------------------
 # DELETE TASK
 # --------------------------------------------------
 
-@app.route("/delete/<int:task_id>")
+@app.route(
+    "/delete/<int:task_id>"
+)
 def delete(task_id):
 
     if "username" not in session:
-        return redirect(url_for("login"))
+
+        return redirect(
+            url_for("login")
+        )
 
     user_id = session["user_id"]
 
@@ -308,6 +355,7 @@ def delete(task_id):
     )
 
     if task is None:
+
         return "Task Not Found", 404
 
     delete_task(
@@ -324,11 +372,16 @@ def delete(task_id):
 # COMPLETE TASK
 # --------------------------------------------------
 
-@app.route("/complete/<int:task_id>")
+@app.route(
+    "/complete/<int:task_id>"
+)
 def complete(task_id):
 
     if "username" not in session:
-        return redirect(url_for("login"))
+
+        return redirect(
+            url_for("login")
+        )
 
     user_id = session["user_id"]
 
@@ -338,6 +391,7 @@ def complete(task_id):
     )
 
     if task is None:
+
         return "Task Not Found", 404
 
     complete_task(
@@ -380,7 +434,10 @@ def register():
 
         except Exception:
 
-            return "Username or email already exists."
+            return (
+                "Username or email already exists.",
+                400
+            )
 
         return redirect(
             url_for("login")
@@ -409,13 +466,16 @@ def login():
         user = search_user(username)
 
         if user is None:
-            return "Invalid username or password.", 401
+
+            return (
+                "Invalid username or password.",
+                401
+            )
 
         if check_password_hash(
             user["password"],
             password
         ):
-
             session.clear()
 
             session["user_id"] = user["user_id"]
@@ -425,7 +485,10 @@ def login():
                 url_for("dashboard")
             )
 
-        return "Invalid username or password.", 401
+        return (
+            "Invalid username or password.",
+            401
+        )
 
     return render_template(
         "login.html"
@@ -440,7 +503,10 @@ def login():
 def profile():
 
     if "username" not in session:
-        return redirect(url_for("login"))
+
+        return redirect(
+            url_for("login")
+        )
 
     username = session["username"]
     user_id = session["user_id"]
@@ -466,6 +532,7 @@ def profile():
             pending_tasks += 1
 
             if task["due_date"] < today:
+
                 overdue_tasks += 1
 
     if total_tasks == 0:
@@ -505,7 +572,7 @@ def logout():
 
 
 # --------------------------------------------------
-# APPLICATION ENTRY POINT
+# RUN APPLICATION
 # --------------------------------------------------
 
 if __name__ == "__main__":
